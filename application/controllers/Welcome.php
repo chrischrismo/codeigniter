@@ -21,6 +21,7 @@ class Welcome extends CI_Controller {
 	public function index()
 	{
                 $dato['string'] = 'hola mundo';
+                $this->load->view('codigofacilito/headers');
 		$this->load->view('welcome_message', $dato);
 	}
 }

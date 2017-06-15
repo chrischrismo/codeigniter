@@ -11,8 +11,16 @@ class Cursos extends CI_Controller {
         }
     
         function index() {
-            $data['cursos'] = $this->codigofacilito_model->obtenerCursos();
+            $data['segmento'] = $this->uri->segment(3);
             $this->load->view("codigofacilito/headers");
+            if (!$data['segmento']) {
+                $data['cursos'] = $this->codigofacilito_model->obtenerCursos();
+            }
+            else
+            {
+                $data['cursos'] = $this->codigofacilito_model->obtenerCurso($data['segmento']);
+            }
+            
             $this->load->view("cursos/cursos",$data);
         }
         
@@ -31,6 +39,28 @@ class Cursos extends CI_Controller {
         $this->load->view("codigofacilito/bienvenido");
     }
     
+    function editar() {
+        $data['id'] = $this->uri->segment(3);
+        $data['curso'] = $this->codigofacilito_model->obtenerCurso($data['id']);
+        $this->load->view('codigofacilito/headers');
+        $this->load->view('cursos/editar',$data);
+    }   
+    
+    function actualizar() {
+        $data = array(
+            'nombre' => $this->input->post('nombre'),
+            'videos' => $this->input->post('videos')
+        );
+        $this->codigofacilito_model->actualizarCurso($this->uri->segment(3), $data);
+        /*$this->load->view("codigofacilito/headers");
+        $this->load->view("codigofacilito/bienvenido");*/
+        redirect(base_url());
+    }
+    
+     function borrar() {
+        $id = $this->uri->segment(3);
+        $this->codigofacilito_model->eliminarCurso($id);
+    }   
     
 }
 
